@@ -26,7 +26,7 @@ public class Scanner extends Phase {
     @Override
     public CompletableFuture<Void> end() {
         final CompletableFuture<Void> voidCompletableFuture = new CompletableFuture<>();
-        voidCompletableFuture.completeAsync(() -> null);
+        voidCompletableFuture.complete(null);
         return voidCompletableFuture;
     }
 }

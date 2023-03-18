@@ -2,23 +2,24 @@ package de.turingStack.analyse;
 
 import de.turingStack.analyse.abstraction.KeyValue;
 import de.turingStack.analyse.abstraction.Phase;
-import de.turingStack.analyse.scanner.FileScanner;
+import lombok.Setter;
 import org.reflections.Reflections;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Comparator;
 import java.util.LinkedList;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class AnalyseService {
     private final LinkedList<Phase> analysePhases = new LinkedList<>();
-    private final File[] filesToCompile;
+    @Setter
     private KeyValue lastStageValue;
 
     public AnalyseService(File[] filesToCompile) {
-        this.filesToCompile = filesToCompile;
+        this.lastStageValue = new KeyValue(Constants.SCANNED_FILES, filesToCompile);
         init();
     }
 
@@ -38,15 +39,15 @@ public class AnalyseService {
     private void handlePhase(Phase phase) {
         Logger.getLogger(this.getClass().getSimpleName()).log(Level.INFO, "Start the analysis phase " + phase.getClass().getSimpleName());
         setupPhaseContent(phase);
-        phase.start().whenCompleteAsync((unused, throwable) ->
-                phase.end()
-                        .whenCompleteAsync((o, throwable1) -> this.lastStageValue = new KeyValue(Constants.LAST_STAGE, o)));
+        phase.start().whenComplete((unused, throwable) -> endPhase(phase));
+    }
+
+    private CompletableFuture<Object> endPhase(Phase phase) {
+        Logger.getLogger(this.getClass().getSimpleName()).log(Level.INFO, "Completion analysis phase " + phase.getClass().getSimpleName());
+        return phase.end().whenComplete((o, throwable1) -> setLastStageValue(new KeyValue(Constants.LAST_STAGE, o)));
     }
 
     private void setupPhaseContent(Phase phase) {
-        if (phase instanceof FileScanner) {
-            phase.getContentVariables().add(new KeyValue(Constants.SCANNED_FILES, this.filesToCompile));
-        }
         if (this.lastStageValue != null) {
             phase.getContentVariables().add(this.lastStageValue);
         }

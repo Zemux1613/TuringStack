@@ -43,7 +43,7 @@ public class FileScanner extends Phase {
     @Override
     public CompletableFuture<ConcurrentHashMap> end() {
         final CompletableFuture<ConcurrentHashMap> future = new CompletableFuture<>();
-        future.completeAsync(() -> fileContent);
+        future.complete(fileContent);
         return future;
     }
 }
