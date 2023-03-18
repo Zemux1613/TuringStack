@@ -33,18 +33,28 @@ public class AnalyseService {
     }
 
     public void executeAnalyse() {
-        this.analysePhases.stream().sorted(Comparator.comparingInt(Phase::getPrioritiy)).toList().forEach(this::handlePhase);
+        this.analysePhases.stream().sorted(Comparator.comparingInt(Phase::getPrioritiy)).peek(System.out::println).toList().forEach(this::handlePhase);
     }
 
     private void handlePhase(Phase phase) {
-        Logger.getLogger(this.getClass().getSimpleName()).log(Level.INFO, "Start the analysis phase " + phase.getClass().getSimpleName());
-        setupPhaseContent(phase);
-        phase.start().whenComplete((unused, throwable) -> endPhase(phase));
+        new Thread(() -> {
+            Logger.getLogger(this.getClass().getSimpleName()).log(Level.INFO, "Start the analysis phase " + phase.getClass().getSimpleName());
+            setupPhaseContent(phase);
+            phase.start().whenComplete((unused, throwable) -> endPhase(phase));
+            try {
+                phase.getLatch().await();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }).start();
     }
 
     private CompletableFuture<Object> endPhase(Phase phase) {
         Logger.getLogger(this.getClass().getSimpleName()).log(Level.INFO, "Completion analysis phase " + phase.getClass().getSimpleName());
-        return phase.end().whenComplete((o, throwable1) -> setLastStageValue(new KeyValue(Constants.LAST_STAGE, o)));
+        return phase.end().whenComplete((o, throwable1) -> {
+            setLastStageValue(new KeyValue(Constants.LAST_STAGE, o));
+            phase.getLatch().countDown();
+        });
     }
 
     private void setupPhaseContent(Phase phase) {

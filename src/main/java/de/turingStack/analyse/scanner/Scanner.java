@@ -17,10 +17,17 @@ public class Scanner extends Phase {
 
     @Override
     public CompletableFuture<Void> start() {
-        return CompletableFuture.runAsync(() -> this.getValue(Constants.LAST_STAGE).ifPresent(keyValue -> {
-            final ConcurrentHashMap<File, String> value = (ConcurrentHashMap<File, String>) keyValue.getValue();
-            value.keySet().forEach(key -> Logger.getLogger(Scanner.class.getSimpleName()).log(Level.INFO, key.getPath() + " | " + value.get(key)));
-        }));
+        return CompletableFuture.runAsync(() -> {
+            this.getValue(Constants.LAST_STAGE).ifPresent(keyValue -> {
+                final ConcurrentHashMap<File, String> value = (ConcurrentHashMap<File, String>) keyValue.getValue();
+                value.keySet().forEach(key -> Logger.getLogger(Scanner.class.getSimpleName()).log(Level.INFO, key.getPath() + " | " + value.get(key)));
+            });
+            try {
+                Thread.currentThread().wait();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     @Override
