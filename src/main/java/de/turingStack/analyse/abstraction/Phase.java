@@ -20,7 +20,7 @@ public abstract class Phase {
 
     public abstract CompletableFuture<Void> start();
 
-    public abstract void end();
+    public abstract <T> CompletableFuture<T> end();
 
     protected Optional<KeyValue> getValue(final String key) {
         return this.contentVariables.stream().filter(keyValue -> keyValue.getKey().equals(key)).findFirst();

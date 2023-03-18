@@ -43,6 +43,9 @@ public class FileScanner extends Phase {
     }
 
     @Override
-    public void end() {
+    public CompletableFuture<Map> end() {
+        final CompletableFuture<Map> future = new CompletableFuture<>();
+        future.complete(fileContent);
+        return future;
     }
 }

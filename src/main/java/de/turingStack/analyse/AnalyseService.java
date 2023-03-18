@@ -13,7 +13,7 @@ import java.util.LinkedList;
 public class AnalyseService {
     private final LinkedList<Phase> analysePhases = new LinkedList<>();
     private final File[] filesToCompile;
-
+    
     public AnalyseService(File[] filesToCompile) {
         this.filesToCompile = filesToCompile;
         init();
@@ -35,7 +35,11 @@ public class AnalyseService {
     private void handlePhase(Phase phase) {
         System.out.println("Start the analysis phase " + phase.getClass().getSimpleName());
         setupPhaseContent(phase);
-        phase.start().whenComplete((unused, throwable) -> phase.end());
+        phase
+                .start()
+                .whenComplete((unused, throwable) -> phase
+                        .end()
+                        .whenComplete((o, throwable1) -> System.out.println(o.getClass().getSimpleName())));
     }
 
     private void setupPhaseContent(Phase phase) {
