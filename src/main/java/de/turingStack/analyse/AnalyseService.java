@@ -13,7 +13,8 @@ import java.util.LinkedList;
 public class AnalyseService {
     private final LinkedList<Phase> analysePhases = new LinkedList<>();
     private final File[] filesToCompile;
-    
+    private KeyValue lastStageValue;
+
     public AnalyseService(File[] filesToCompile) {
         this.filesToCompile = filesToCompile;
         init();
@@ -39,12 +40,15 @@ public class AnalyseService {
                 .start()
                 .whenComplete((unused, throwable) -> phase
                         .end()
-                        .whenComplete((o, throwable1) -> System.out.println(o.getClass().getSimpleName())));
+                        .whenComplete((o, throwable1) -> this.lastStageValue = new KeyValue(Constants.LAST_STAGE, o)));
     }
 
     private void setupPhaseContent(Phase phase) {
         if (phase instanceof FileScanner) {
-            phase.getContentVariables().add(new KeyValue("files", this.filesToCompile));
+            phase.getContentVariables().add(new KeyValue(Constants.SCANNED_FILES, this.filesToCompile));
+        }
+        if (this.lastStageValue != null) {
+            phase.getContentVariables().add(this.lastStageValue);
         }
     }
 
