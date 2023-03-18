@@ -3,11 +3,13 @@ package de.turingStack;
 import de.turingStack.analyse.AnalyseService;
 
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class TuringStack {
     public static void main(String[] args) {
         if (args.length == 0 && System.getenv("projectPath") == null) {
-            System.out.println("Please choose a Path! (java -jar turingStackCompiler.java <PATH>)");
+            Logger.getLogger(TuringStack.class.getSimpleName()).log(Level.INFO, "Please choose a Path! (java -jar turingStackCompiler.java <PATH>)");
             System.exit(-1);
         }
         String projectPath = "";

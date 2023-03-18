@@ -9,6 +9,8 @@ import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Comparator;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class AnalyseService {
     private final LinkedList<Phase> analysePhases = new LinkedList<>();
@@ -25,7 +27,7 @@ public class AnalyseService {
                 .getSubTypesOf(Phase.class)
                 .stream()
                 .map(this::getPhase)
-                .peek(phase -> System.out.println("The compiler has loaded the analysis phase " + phase.getClass().getSimpleName()))
+                .peek(phase -> Logger.getLogger(this.getClass().getSimpleName()).log(Level.INFO, "The compiler has loaded the analysis phase " + phase.getClass().getSimpleName()))
                 .forEach(this.analysePhases::add);
     }
 
@@ -34,13 +36,11 @@ public class AnalyseService {
     }
 
     private void handlePhase(Phase phase) {
-        System.out.println("Start the analysis phase " + phase.getClass().getSimpleName());
+        Logger.getLogger(this.getClass().getSimpleName()).log(Level.INFO, "Start the analysis phase " + phase.getClass().getSimpleName());
         setupPhaseContent(phase);
-        phase
-                .start()
-                .whenComplete((unused, throwable) -> phase
-                        .end()
-                        .whenComplete((o, throwable1) -> this.lastStageValue = new KeyValue(Constants.LAST_STAGE, o)));
+        phase.start().whenCompleteAsync((unused, throwable) ->
+                phase.end()
+                        .whenCompleteAsync((o, throwable1) -> this.lastStageValue = new KeyValue(Constants.LAST_STAGE, o)));
     }
 
     private void setupPhaseContent(Phase phase) {
