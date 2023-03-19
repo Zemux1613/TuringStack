@@ -1,25 +1,27 @@
 package de.turingStack.analyse;
 
-import de.turingStack.analyse.abstraction.KeyValue;
 import de.turingStack.analyse.abstraction.Phase;
-import lombok.Setter;
+import lombok.Getter;
 import org.reflections.Reflections;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Comparator;
 import java.util.LinkedList;
-import java.util.concurrent.CompletableFuture;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class AnalyseService {
-    private final LinkedList<Phase> analysePhases = new LinkedList<>();
-    @Setter
-    private KeyValue lastStageValue;
+    private final List<Phase> analysePhases = new LinkedList<>();
+    @Getter
+    private static final ConcurrentHashMap<String, List<? extends Object>> storage = new ConcurrentHashMap<>();
+    @Getter
+    private File targetFile;
 
-    public AnalyseService(File[] filesToCompile) {
-        this.lastStageValue = new KeyValue(Constants.SCANNED_FILES, filesToCompile);
+    public AnalyseService(File filesToCompile) {
+        this.targetFile = filesToCompile;
         init();
     }
 
@@ -33,34 +35,14 @@ public class AnalyseService {
     }
 
     public void executeAnalyse() {
-        this.analysePhases.stream().sorted(Comparator.comparingInt(Phase::getPrioritiy)).peek(System.out::println).toList().forEach(this::handlePhase);
+        this.analysePhases.stream().sorted(Comparator.comparingInt(Phase::getPrioritiy)).toList().forEach(this::handlePhase);
     }
 
     private void handlePhase(Phase phase) {
-        new Thread(() -> {
-            Logger.getLogger(this.getClass().getSimpleName()).log(Level.INFO, "Start the analysis phase " + phase.getClass().getSimpleName());
-            setupPhaseContent(phase);
-            phase.start().whenComplete((unused, throwable) -> endPhase(phase));
-            try {
-                phase.getLatch().await();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }).start();
-    }
-
-    private CompletableFuture<Object> endPhase(Phase phase) {
+        Logger.getLogger(this.getClass().getSimpleName()).log(Level.INFO, "Start the analysis phase " + phase.getClass().getSimpleName());
+        phase.start();
         Logger.getLogger(this.getClass().getSimpleName()).log(Level.INFO, "Completion analysis phase " + phase.getClass().getSimpleName());
-        return phase.end().whenComplete((o, throwable1) -> {
-            setLastStageValue(new KeyValue(Constants.LAST_STAGE, o));
-            phase.getLatch().countDown();
-        });
-    }
-
-    private void setupPhaseContent(Phase phase) {
-        if (this.lastStageValue != null) {
-            phase.getContentVariables().add(this.lastStageValue);
-        }
+        phase.end();
     }
 
     private Phase getPhase(Class<? extends Phase> aClass) {

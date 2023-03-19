@@ -1,39 +1,51 @@
 package de.turingStack.analyse.scanner;
 
+import de.turingStack.analyse.AnalyseService;
 import de.turingStack.analyse.Constants;
 import de.turingStack.analyse.abstraction.Phase;
+import de.turingStack.analyse.scanner.tokens.Token;
+import de.turingStack.analyse.scanner.tokens.TokenCategory;
 
-import java.io.File;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Scanner extends Phase {
+
+    private List<Token> tokens = new ArrayList<>();
 
     public Scanner() {
         super(2);
     }
 
     @Override
-    public CompletableFuture<Void> start() {
-        return CompletableFuture.runAsync(() -> {
-            this.getValue(Constants.LAST_STAGE).ifPresent(keyValue -> {
-                final ConcurrentHashMap<File, String> value = (ConcurrentHashMap<File, String>) keyValue.getValue();
-                value.keySet().forEach(key -> Logger.getLogger(Scanner.class.getSimpleName()).log(Level.INFO, key.getPath() + " | " + value.get(key)));
-            });
-            try {
-                Thread.currentThread().wait();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+    public void start() {
+        AnalyseService.getStorage().get(Constants.SCANNED_FILES).stream().map(o -> (String) o).forEach(fileContent -> {
+            final String[] lines = fileContent.split(";");
+            int id = 0;
+            for (final String line : lines) {
+                final String[] toTokenize = line.split("\\s");
+                for (String sequenz : toTokenize) {
+                    boolean kill = false;
+                    for (int i = 0; i < TokenCategory.values().length && !kill; i++) {
+                        final TokenCategory tokenCategory = TokenCategory.values()[i];
+                        if (tokenCategory.getValidationPattern().matcher(sequenz).find()) {
+                            tokens.add(new Token(id, sequenz.contains(";") ? sequenz.substring(0,sequenz.length()-1) : sequenz, tokenCategory));
+                            System.out.println(id + " | " + sequenz + " -> " + tokenCategory.name());
+                            id++;
+                            if(sequenz.contains(";")){
+                                tokens.add(new Token(id, ";", TokenCategory.LINEBREAK));
+                                id++;
+                            }
+                            kill = true;
+                        }
+                    }
+                }
             }
         });
     }
 
     @Override
-    public CompletableFuture<Void> end() {
-        final CompletableFuture<Void> voidCompletableFuture = new CompletableFuture<>();
-        voidCompletableFuture.complete(null);
-        return voidCompletableFuture;
+    public void end() {
+
     }
 }

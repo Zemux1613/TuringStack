@@ -1,12 +1,16 @@
 package de.turingStack;
 
 import de.turingStack.analyse.AnalyseService;
+import lombok.Getter;
 
 import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class TuringStack {
+    @Getter
+    private static AnalyseService analyseService;
+
     public static void main(String[] args) {
         if (args.length == 0 && System.getenv("projectPath") == null) {
             Logger.getLogger(TuringStack.class.getSimpleName()).log(Level.INFO, "Please choose a Path! (java -jar turingStackCompiler.java <PATH>)");
@@ -20,10 +24,16 @@ public class TuringStack {
             projectPath = args[0];
         }
 
+        Logger.getLogger(TuringStack.class.getSimpleName()).log(Level.INFO, "Scann '" + projectPath + "' for files..");
+
         final File[] filesToCompile = new File(projectPath).listFiles((dir, name) -> name.matches(".*\\.tss"));
 
-        AnalyseService analyseService = new AnalyseService(filesToCompile);
-        analyseService.executeAnalyse();
+        if (filesToCompile.length == 0) {
+            Logger.getLogger(TuringStack.class.getSimpleName()).log(Level.INFO, "Theire are no TuringStack files on '" + projectPath + "'!");
+            System.exit(-2);
+        }
 
+        analyseService = new AnalyseService(filesToCompile[0]);
+        analyseService.executeAnalyse();
     }
 }
