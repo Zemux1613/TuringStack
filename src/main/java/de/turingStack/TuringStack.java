@@ -33,7 +33,10 @@ public class TuringStack {
             System.exit(-2);
         }
 
-        analyseService = new AnalyseService(filesToCompile[0]);
-        analyseService.executeAnalyse();
+        for (File file : filesToCompile) {
+            AnalyseService.getStorage().clear();
+            analyseService = new AnalyseService(file);
+            analyseService.executeAnalyse();
+        }
     }
 }

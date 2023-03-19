@@ -10,15 +10,13 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class AnalyseService {
-    private final List<Phase> analysePhases = new LinkedList<>();
     @Getter
     private static final ConcurrentHashMap<String, List<? extends Object>> storage = new ConcurrentHashMap<>();
+    private final List<Phase> analysePhases = new LinkedList<>();
     @Getter
-    private File targetFile;
+    private final File targetFile;
 
     public AnalyseService(File filesToCompile) {
         this.targetFile = filesToCompile;
@@ -30,7 +28,7 @@ public class AnalyseService {
                 .getSubTypesOf(Phase.class)
                 .stream()
                 .map(this::getPhase)
-                .peek(phase -> Logger.getLogger(this.getClass().getSimpleName()).log(Level.INFO, "The compiler has loaded the analysis phase " + phase.getClass().getSimpleName()))
+                .peek(phase -> System.out.println("The compiler has loaded the analysis phase " + phase.getClass().getSimpleName()))
                 .forEach(this.analysePhases::add);
     }
 
@@ -39,9 +37,10 @@ public class AnalyseService {
     }
 
     private void handlePhase(Phase phase) {
-        Logger.getLogger(this.getClass().getSimpleName()).log(Level.INFO, "Start the analysis phase " + phase.getClass().getSimpleName());
+        System.out.println("\n");
+        System.out.println("Start the analysis phase " + phase.getClass().getSimpleName());
         phase.start();
-        Logger.getLogger(this.getClass().getSimpleName()).log(Level.INFO, "Completion analysis phase " + phase.getClass().getSimpleName());
+        System.out.println("Completion analysis phase " + phase.getClass().getSimpleName());
         phase.end();
     }
 
