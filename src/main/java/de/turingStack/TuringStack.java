@@ -33,6 +33,8 @@ public class TuringStack {
             System.exit(-2);
         }
 
+        AnalyseService.init();
+
         for (File file : filesToCompile) {
             AnalyseService.getStorage().clear();
             analyseService = new AnalyseService(file);

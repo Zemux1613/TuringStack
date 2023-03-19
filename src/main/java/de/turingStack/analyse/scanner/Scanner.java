@@ -20,13 +20,14 @@ public class Scanner extends Phase {
     @Override
     public void start() {
         AnalyseService.getStorage().get(Constants.SCANNED_FILES).stream().map(o -> (String) o).forEach(fileContent -> {
+            if (fileContent.isEmpty()) return;
             final String[] lines = fileContent.split(";");
             int id = 0;
             for (final String line : lines) {
-                if(line.startsWith("//")) continue;
+                if (line.startsWith("//")) continue;
                 final String[] toTokenize = line.split("\\s");
                 for (String sequenz : toTokenize) {
-                    if(sequenz.startsWith("//")) break;
+                    if (sequenz.startsWith("//")) break;
                     boolean kill = false;
                     for (int i = 0; i < TokenCategory.values().length && !kill; i++) {
                         final TokenCategory tokenCategory = TokenCategory.values()[i];

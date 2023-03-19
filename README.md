@@ -24,4 +24,4 @@ var <NAME> = <VALUE> | Create a variable NAME and assign VALUE to this variable
 
 - A line break is represented by a semicolon.
 - Variable names may contain only alpha characters
-- A comment is started with '//' and is valid until the end of the line 
+- A comment is started with '//' and is valid until the end of the line
