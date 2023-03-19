@@ -11,7 +11,7 @@ import java.util.List;
 
 public class Scanner extends Phase {
 
-    private List<Token> tokens = new ArrayList<>();
+    private final List<Token> tokens = new ArrayList<>();
 
     public Scanner() {
         super(2);
@@ -23,17 +23,20 @@ public class Scanner extends Phase {
             final String[] lines = fileContent.split(";");
             int id = 0;
             for (final String line : lines) {
+                if(line.startsWith("//")) continue;
                 final String[] toTokenize = line.split("\\s");
                 for (String sequenz : toTokenize) {
+                    if(sequenz.startsWith("//")) break;
                     boolean kill = false;
                     for (int i = 0; i < TokenCategory.values().length && !kill; i++) {
                         final TokenCategory tokenCategory = TokenCategory.values()[i];
                         if (tokenCategory.getValidationPattern().matcher(sequenz).find()) {
-                            tokens.add(new Token(id, sequenz.contains(";") ? sequenz.substring(0,sequenz.length()-1) : sequenz, tokenCategory));
+                            tokens.add(new Token(id, sequenz.contains(";") ? sequenz.substring(0, sequenz.length() - 1) : sequenz, tokenCategory));
                             System.out.println(id + " | " + sequenz + " -> " + tokenCategory.name());
                             id++;
-                            if(sequenz.contains(";")){
+                            if (sequenz.contains(";")) {
                                 tokens.add(new Token(id, ";", TokenCategory.LINEBREAK));
+                                System.out.println(id + " | ; -> " + TokenCategory.LINEBREAK.name());
                                 id++;
                             }
                             kill = true;
