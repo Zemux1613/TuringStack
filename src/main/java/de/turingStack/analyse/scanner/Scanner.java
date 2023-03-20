@@ -38,15 +38,13 @@ public class Scanner extends Phase {
                             tokens.add(new Token(id, hasLineBreak ? sequenz.substring(0, sequenz.length() - 1) : sequenz, tokenCategory));
                             System.out.println(id + " | " + sequenz + " -> " + tokenCategory.name());
                             id++;
-                            if (hasLineBreak) {
-                                tokens.add(new Token(id, ";", TokenCategory.LINEBREAK));
-                                System.out.println(id + " | ; -> " + TokenCategory.LINEBREAK.name());
-                                id++;
-                            }
                             kill = true;
                         }
                     }
                 }
+                tokens.add(new Token(id, ";", TokenCategory.LINEBREAK));
+                System.out.println(id + " | ; -> " + TokenCategory.LINEBREAK.name());
+                id++;
             }
         });
     }

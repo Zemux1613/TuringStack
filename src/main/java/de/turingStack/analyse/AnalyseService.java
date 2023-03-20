@@ -45,8 +45,7 @@ public class AnalyseService {
     }
 
     private void handlePhase(Phase phase) {
-        System.out.println("\n");
-        System.out.println("Start the analysis phase " + phase.getClass().getSimpleName());
+        System.out.println("\nStart the analysis phase " + phase.getClass().getSimpleName());
         phase.start();
         System.out.println("Completion analysis phase " + phase.getClass().getSimpleName());
         phase.end();
