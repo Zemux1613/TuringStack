@@ -8,6 +8,7 @@ import de.turingStack.analyse.scanner.tokens.TokenCategory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class Scanner extends Phase {
 
@@ -15,6 +16,7 @@ public class Scanner extends Phase {
 
     public Scanner() {
         super(2);
+        final Logger logger = Logger.getLogger(getClass().getSimpleName());
     }
 
     @Override
@@ -32,10 +34,11 @@ public class Scanner extends Phase {
                     for (int i = 0; i < TokenCategory.values().length && !kill; i++) {
                         final TokenCategory tokenCategory = TokenCategory.values()[i];
                         if (tokenCategory.getValidationPattern().matcher(sequenz).find()) {
-                            tokens.add(new Token(id, sequenz.contains(";") ? sequenz.substring(0, sequenz.length() - 1) : sequenz, tokenCategory));
+                            final boolean hasLineBreak = sequenz.contains(";");
+                            tokens.add(new Token(id, hasLineBreak ? sequenz.substring(0, sequenz.length() - 1) : sequenz, tokenCategory));
                             System.out.println(id + " | " + sequenz + " -> " + tokenCategory.name());
                             id++;
-                            if (sequenz.contains(";")) {
+                            if (hasLineBreak) {
                                 tokens.add(new Token(id, ";", TokenCategory.LINEBREAK));
                                 System.out.println(id + " | ; -> " + TokenCategory.LINEBREAK.name());
                                 id++;
@@ -50,6 +53,6 @@ public class Scanner extends Phase {
 
     @Override
     public void end() {
-
+        AnalyseService.getStorage().put(this.getClass().getSimpleName(), this.tokens);
     }
 }

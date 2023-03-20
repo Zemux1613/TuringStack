@@ -27,7 +27,7 @@ public class AnalyseService {
                 .getSubTypesOf(Phase.class)
                 .stream()
                 .map(AnalyseService::getPhase)
-                .peek(phase -> System.out.println("The compiler has loaded the analysis phase " + phase.getClass().getSimpleName()))
+                .peek(phase -> System.out.println("[" + AnalyseService.class.getSimpleName() + "] The compiler has loaded the analysis phase " + phase.getClass().getSimpleName()))
                 .forEach(analysePhases::add);
     }
 

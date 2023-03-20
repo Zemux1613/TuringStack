@@ -1,6 +1,7 @@
 package de.turingStack;
 
 import de.turingStack.analyse.AnalyseService;
+import de.turingStack.analyse.parser.Parser;
 import lombok.Getter;
 
 import java.io.File;
@@ -34,6 +35,7 @@ public class TuringStack {
         }
 
         AnalyseService.init();
+        Parser.loadCommands();
 
         for (File file : filesToCompile) {
             AnalyseService.getStorage().clear();
