@@ -12,5 +12,5 @@ public abstract class Command {
     private Token token;
     private final List<List<TokenCategory>> syntax;
 
-    protected abstract void execute();
+    public abstract void execute(CommandLine commandLine);
 }

@@ -38,7 +38,6 @@ public class TuringStack {
         Parser.loadCommands();
 
         for (File file : filesToCompile) {
-            AnalyseService.getStorage().clear();
             analyseService = new AnalyseService(file);
             analyseService.executeAnalyse();
         }

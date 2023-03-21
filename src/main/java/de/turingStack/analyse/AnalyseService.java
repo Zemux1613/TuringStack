@@ -50,4 +50,5 @@ public class AnalyseService {
         System.out.println("Completion analysis phase " + phase.getClass().getSimpleName());
         phase.end();
     }
+
 }

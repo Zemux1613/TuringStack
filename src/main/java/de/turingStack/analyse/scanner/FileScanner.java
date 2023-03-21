@@ -37,6 +37,7 @@ public class FileScanner extends Phase {
 
     @Override
     public void start() {
+        fileContent.clear();
         this.readAll();
     }
 

@@ -21,6 +21,7 @@ public class Scanner extends Phase {
 
     @Override
     public void start() {
+        if (!tokens.isEmpty()) tokens.clear();
         AnalyseService.getStorage().get(Constants.SCANNED_FILES).stream().map(o -> (String) o).forEach(fileContent -> {
             if (fileContent.isEmpty()) return;
             final String[] lines = fileContent.split(";");
