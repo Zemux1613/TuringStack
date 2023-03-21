@@ -1,4 +1,4 @@
-package de.turingStack.analyse.scanner.tokens;
+package de.turingStack.analyse.abstraction.scanner;
 
 public record Token(int id, String content, TokenCategory category) {
 }

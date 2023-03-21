@@ -1,4 +1,4 @@
-package de.turingStack.analyse.scanner.tokens;
+package de.turingStack.analyse.abstraction.scanner;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,6 +13,5 @@ public enum TokenCategory {
     NUMBER(Pattern.compile("(\\d([.,]\\d)?)+")),
     OPERATOR(Pattern.compile("(=|\\+|-|\\*|/)")),
     LINEBREAK(Pattern.compile("(;)"));
-
     public Pattern validationPattern;
 }

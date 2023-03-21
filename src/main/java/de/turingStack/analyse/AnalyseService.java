@@ -22,6 +22,9 @@ public class AnalyseService {
         this.targetFile = filesToCompile;
     }
 
+    /**
+     * Loads all compiler phases once into memory
+     */
     public static void init() {
         new Reflections("de.turingStack.analyse")
                 .getSubTypesOf(Phase.class)
@@ -31,6 +34,12 @@ public class AnalyseService {
                 .forEach(analysePhases::add);
     }
 
+    /**
+     * Creates a new instance of a given class
+     *
+     * @param aClass Class from which a new instance is to be created
+     * @return Returns a new instance of the passed class
+     */
     private static Phase getPhase(Class<? extends Phase> aClass) {
         try {
             return aClass.getDeclaredConstructor().newInstance();
@@ -40,15 +49,22 @@ public class AnalyseService {
         }
     }
 
+    /**
+     * Start the compiler for the file passed in the construktur
+     */
     public void executeAnalyse() {
         analysePhases.stream().sorted(Comparator.comparingInt(Phase::getPrioritiy)).toList().forEach(this::handlePhase);
     }
 
+    /**
+     * Start and stope a passed phase
+     *
+     * @param phase Phase which should be treated
+     */
     private void handlePhase(Phase phase) {
         System.out.println("\nStart the analysis phase " + phase.getClass().getSimpleName());
         phase.start();
         System.out.println("Completion analysis phase " + phase.getClass().getSimpleName());
         phase.end();
     }
-
 }

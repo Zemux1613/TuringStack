@@ -3,8 +3,8 @@ package de.turingStack.analyse.scanner;
 import de.turingStack.analyse.AnalyseService;
 import de.turingStack.analyse.Constants;
 import de.turingStack.analyse.abstraction.Phase;
-import de.turingStack.analyse.scanner.tokens.Token;
-import de.turingStack.analyse.scanner.tokens.TokenCategory;
+import de.turingStack.analyse.abstraction.scanner.Token;
+import de.turingStack.analyse.abstraction.scanner.TokenCategory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +52,6 @@ public class Scanner extends Phase {
 
     @Override
     public void end() {
-        AnalyseService.getStorage().put(this.getClass().getSimpleName(), this.tokens);
+        AnalyseService.getStorage().put(Constants.EXTRACTED_TOKENS, this.tokens);
     }
 }

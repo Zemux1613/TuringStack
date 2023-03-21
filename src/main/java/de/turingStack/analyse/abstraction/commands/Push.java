@@ -1,8 +1,8 @@
-package de.turingStack.analyse.parser.commands;
+package de.turingStack.analyse.abstraction.commands;
 
 import de.turingStack.analyse.abstraction.pasing.Command;
 import de.turingStack.analyse.abstraction.pasing.CommandLine;
-import de.turingStack.analyse.scanner.tokens.TokenCategory;
+import de.turingStack.analyse.abstraction.scanner.TokenCategory;
 
 import java.util.Arrays;
 

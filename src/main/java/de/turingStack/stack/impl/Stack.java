@@ -2,13 +2,16 @@ package de.turingStack.stack.impl;
 
 import de.turingStack.stack.abstraction.IStackPattern;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 public class Stack<T> implements IStackPattern<T> {
-    private Stack<T> stack;
     @Getter
     private final String registerName;
+    private final java.util.Stack<T> stack;
+
+    public Stack(final String registerName) {
+        this.registerName = registerName;
+        this.stack = new java.util.Stack<T>();
+    }
 
     @Override
     public void push(T item) {
@@ -22,6 +25,6 @@ public class Stack<T> implements IStackPattern<T> {
 
     @Override
     public int getSize() {
-        return stack.getSize();
+        return stack.size();
     }
 }

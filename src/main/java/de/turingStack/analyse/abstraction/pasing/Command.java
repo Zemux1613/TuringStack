@@ -1,7 +1,7 @@
 package de.turingStack.analyse.abstraction.pasing;
 
-import de.turingStack.analyse.scanner.tokens.Token;
-import de.turingStack.analyse.scanner.tokens.TokenCategory;
+import de.turingStack.analyse.abstraction.scanner.Token;
+import de.turingStack.analyse.abstraction.scanner.TokenCategory;
 import lombok.Data;
 
 import java.util.List;

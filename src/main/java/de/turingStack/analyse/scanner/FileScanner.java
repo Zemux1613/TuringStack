@@ -20,6 +20,9 @@ public class FileScanner extends Phase {
         super(1);
     }
 
+    /**
+     * Read everything in the file
+     */
     public void readAll() {
         try {
             final File targetFile = TuringStack.getAnalyseService().getTargetFile();
