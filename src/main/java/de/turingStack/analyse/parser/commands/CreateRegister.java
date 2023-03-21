@@ -10,4 +10,9 @@ public class CreateRegister extends Command {
     public CreateRegister() {
         super("createRegister", List.of(Arrays.asList(TokenCategory.KEYWORD, TokenCategory.NAME)));
     }
+
+    @Override
+    protected void execute() {
+
+    }
 }

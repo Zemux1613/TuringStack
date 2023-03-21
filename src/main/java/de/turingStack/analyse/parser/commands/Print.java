@@ -12,4 +12,8 @@ public class Print extends Command {
         super("print", List.of(Arrays.asList(TokenCategory.KEYWORD, TokenCategory.NAME)));
     }
 
+    @Override
+    protected void execute() {
+
+    }
 }

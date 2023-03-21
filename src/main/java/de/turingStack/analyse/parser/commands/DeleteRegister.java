@@ -10,4 +10,9 @@ public class DeleteRegister extends Command {
     public DeleteRegister() {
         super("deleteRegister", Arrays.asList(Arrays.asList(TokenCategory.KEYWORD, TokenCategory.NAME)));
     }
+
+    @Override
+    protected void execute() {
+
+    }
 }

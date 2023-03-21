@@ -10,4 +10,9 @@ public class Pop extends Command {
     public Pop() {
         super("pop", List.of(Arrays.asList(TokenCategory.KEYWORD, TokenCategory.NAME)));
     }
+
+    @Override
+    protected void execute() {
+
+    }
 }
