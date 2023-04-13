@@ -29,9 +29,10 @@ public class Scanner extends Phase {
           if (fileContent.isEmpty()) {
             return;
           }
-          final String[] lines = fileContent.split(";");
+          final String[] lines = fileContent.trim().split(";");
           int id = 0;
           for (final String line : lines) {
+            System.out.println("call");
             final String[] toTokenize = line.split("\\s");
             for (String sequenz : toTokenize) {
               boolean kill = false;
