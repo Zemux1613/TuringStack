@@ -10,21 +10,23 @@ import java.util.Arrays;
 import java.util.List;
 
 public class CreateRegister extends Command {
-    public CreateRegister() {
-        super("createRegister", List.of(Arrays.asList(TokenCategory.KEYWORD, TokenCategory.NAME, TokenCategory.LINEBREAK)));
-    }
 
-    @Override
-    public void execute(CommandLine commandLine) {
-        commandLine.getFirstOf(TokenCategory.KEYWORD).ifPresent(token -> {
-            if (!token.content().equals(this.getName())) {
-                return;
-            }
-            commandLine
-                    .getFirstOf(TokenCategory.NAME)
-                    .stream()
-                    .map(Token::content)
-                    .forEach(RegisterProvider::addRegister);
-        });
-    }
+  public CreateRegister() {
+    super("createRegister",
+        List.of(Arrays.asList(TokenCategory.KEYWORD, TokenCategory.NAME, TokenCategory.LINEBREAK)));
+  }
+
+  @Override
+  public void execute(CommandLine commandLine) {
+    commandLine.getFirstOf(TokenCategory.KEYWORD).ifPresent(token -> {
+      if (!token.content().equals(this.getName())) {
+        return;
+      }
+      commandLine
+          .getFirstOf(TokenCategory.NAME)
+          .stream()
+          .map(Token::content)
+          .forEach(RegisterProvider::addRegister);
+    });
+  }
 }
