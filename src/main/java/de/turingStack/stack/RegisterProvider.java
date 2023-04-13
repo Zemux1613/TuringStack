@@ -21,5 +21,6 @@ public class RegisterProvider {
 
     public static void deleteRegister(final String name) {
         getRegister(name).ifPresent(registers::remove);
+        System.out.println("Delete register " + name);
     }
 }
