@@ -7,6 +7,7 @@ import de.turingStack.analyse.abstraction.scanner.TokenCategory;
 
 import de.turingStack.stack.RegisterProvider;
 import de.turingStack.stack.objects.Register;
+import de.turingStack.variables.VariableProvider;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
@@ -31,9 +32,15 @@ public class Print extends Command {
           Iterator iterator = register.iterator();
           StringJoiner joiner = new StringJoiner(", ");
           while (iterator.hasNext()) {
-            joiner.add(iterator.next().toString());
+            String string = iterator.next().toString();
+            VariableProvider
+                .getVariableByName(string)
+                .ifPresentOrElse(
+                    variable -> joiner.add(variable.value().toString()),
+                    () -> joiner.add(string));
           }
-          System.out.println("Content of register " + register.getRegisterName() + ": [" + joiner + "]");
+          System.out.println(
+              "Content of register " + register.getRegisterName() + ": [" + joiner + "]");
         }, () -> System.out.println("No register found"));
       });
     });
