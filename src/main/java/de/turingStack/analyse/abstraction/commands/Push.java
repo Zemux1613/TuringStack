@@ -38,14 +38,14 @@ public class Push extends Command {
 
       if (commandLine.tokens().stream().map(Token::category).toList().contains(TokenCategory.NUMBER)) {
         commandLine.getFirstOf(TokenCategory.NUMBER)
-            .ifPresent(value -> registerOptional
+            .ifPresent(valueToken -> registerOptional
                 .ifPresent(
-                    register -> register.push(value.content())
+                    register -> register.push(valueToken.content())
                 )
             );
       } else {
-        Token value = commandLine.tokens().get(2);
-        registerOptional.ifPresent(register -> register.push(value.content()));
+        Token valueToken = commandLine.tokens().get(2);
+        registerOptional.ifPresent(register -> register.push(valueToken.content()));
       }
     });
   }
