@@ -24,7 +24,7 @@ public class DeleteRegister extends Command {
                     .getFirstOf(TokenCategory.NAME)
                     .stream()
                     .map(Token::content)
-                    .forEach(RegisterProvider::addRegister);
+                    .forEach(RegisterProvider::deleteRegister);
         });
     }
 }
