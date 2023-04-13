@@ -20,7 +20,7 @@ public class Register extends Stack {
 
     @Override
     public Object push(Object item) {
-        System.out.println("push from register " + this.registerName);
+        System.out.println("push to register " + this.registerName);
         return super.push(item);
     }
 }

@@ -5,13 +5,23 @@ import lombok.Getter;
 @Getter
 public abstract class Phase {
 
-    private final int prioritiy;
+  /**
+   * execute priority the lowest priority is executed at the beginning, the highest priority is
+   * executed at the end
+   */
+  private final int prioritiy;
 
-    public Phase(final int prioritiy) {
-        this.prioritiy = prioritiy;
-    }
+  public Phase(final int prioritiy) {
+    this.prioritiy = prioritiy;
+  }
 
-    public abstract void start();
+  /**
+   * Begin stage of a phase
+   */
+  public abstract void start();
 
-    public abstract void end();
+  /**
+   * End stage of a phase
+   */
+  public abstract void end();
 }
