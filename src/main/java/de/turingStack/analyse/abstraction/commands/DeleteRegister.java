@@ -17,7 +17,7 @@ public class DeleteRegister extends Command {
     @Override
     public void execute(CommandLine commandLine) {
         commandLine.getFirstOf(TokenCategory.KEYWORD).ifPresent(token -> {
-            if (token.content().equals(this.getName())) {
+            if (!token.content().equals(this.getName())) {
                 return;
             }
             commandLine
