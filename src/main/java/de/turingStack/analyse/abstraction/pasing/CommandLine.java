@@ -8,6 +8,11 @@ import java.util.Optional;
 
 public record CommandLine(List<Token> tokens, int lineCount) {
 
+  /**
+   * get first element token in TokenCategory
+   * @param tokenCategory TokenCategory of target token
+   * @return Optional<Token> of founding result
+   */
   public Optional<Token> getFirstOf(TokenCategory tokenCategory) {
     if (tokens.stream().map(Token::category).anyMatch(category -> category == tokenCategory)) {
       for (Token token : tokens) {

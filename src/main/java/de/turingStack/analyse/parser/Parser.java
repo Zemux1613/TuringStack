@@ -127,9 +127,9 @@ public class Parser extends Phase {
    * @return True when equality prevails, false otherwise
    */
   private boolean compareList(List<TokenCategory> left, List<TokenCategory> right) {
-      if (left.size() != right.size()) {
-          return false;
-      }
+    if (left.size() != right.size()) {
+      return false;
+    }
     for (int i = 0; i < left.size(); i++) {
       if (left.get(i) != right.get(i)) {
         return false;
