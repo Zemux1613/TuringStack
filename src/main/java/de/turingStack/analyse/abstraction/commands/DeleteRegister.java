@@ -4,7 +4,7 @@ import de.turingStack.analyse.abstraction.pasing.Command;
 import de.turingStack.analyse.abstraction.pasing.CommandLine;
 import de.turingStack.analyse.abstraction.scanner.Token;
 import de.turingStack.analyse.abstraction.scanner.TokenCategory;
-import de.turingStack.stack.RegisterProvider;
+import de.turingStack.languageFeatures.RegisterProvider;
 
 import java.util.Arrays;
 

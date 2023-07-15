@@ -1,6 +1,6 @@
-package de.turingStack.stack;
+package de.turingStack.languageFeatures;
 
-import de.turingStack.stack.objects.Register;
+import de.turingStack.languageFeatures.objects.Register;
 
 import java.util.Optional;
 import java.util.concurrent.CopyOnWriteArraySet;

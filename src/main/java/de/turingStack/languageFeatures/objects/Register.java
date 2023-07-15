@@ -1,4 +1,4 @@
-package de.turingStack.stack.objects;
+package de.turingStack.languageFeatures.objects;
 
 import lombok.Data;
 

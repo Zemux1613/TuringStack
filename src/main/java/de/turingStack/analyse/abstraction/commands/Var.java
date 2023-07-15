@@ -3,6 +3,7 @@ package de.turingStack.analyse.abstraction.commands;
 import de.turingStack.analyse.abstraction.pasing.Command;
 import de.turingStack.analyse.abstraction.pasing.CommandLine;
 import de.turingStack.analyse.abstraction.scanner.TokenCategory;
+import de.turingStack.languageFeatures.VariablesStorage;
 
 import java.util.Arrays;
 
@@ -17,6 +18,13 @@ public class Var extends Command {
 
     @Override
     public void execute(CommandLine commandLine) {
-
+        commandLine.getFirstOf(TokenCategory.KEYWORD).ifPresent(token -> {
+            if (token.content().equals(this.getName())) {
+                return;
+            }
+            commandLine
+                    .getFirstOf(TokenCategory.NAME)
+                    .ifPresent(varNameOptional -> VariablesStorage.declareAndInitVariable(varNameOptional.content(), 1));
+        });
     }
 }

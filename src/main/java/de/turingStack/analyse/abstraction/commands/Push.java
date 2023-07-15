@@ -2,7 +2,9 @@ package de.turingStack.analyse.abstraction.commands;
 
 import de.turingStack.analyse.abstraction.pasing.Command;
 import de.turingStack.analyse.abstraction.pasing.CommandLine;
+import de.turingStack.analyse.abstraction.scanner.Token;
 import de.turingStack.analyse.abstraction.scanner.TokenCategory;
+import de.turingStack.languageFeatures.RegisterProvider;
 
 import java.util.Arrays;
 
@@ -16,6 +18,22 @@ public class Push extends Command {
 
     @Override
     public void execute(CommandLine commandLine) {
-
+        commandLine.getFirstOf(TokenCategory.KEYWORD).ifPresent(token -> {
+            if (token.content().equals(this.getName())) {
+                return;
+            }
+            commandLine
+                    .getFirstOf(TokenCategory.NAME)
+                    .stream()
+                    .map(Token::content)
+                    .map(RegisterProvider::getRegister)
+                    .map(register -> register.orElse(null))
+                    .findFirst()
+                    .ifPresent(register -> commandLine
+                            .getFirstOf(TokenCategory.NUMBER)
+                            .map(Token::content)
+                            .ifPresentOrElse(register::push,
+                                    () -> register.push(commandLine.tokens().get(2).content())));
+        });
     }
 }
