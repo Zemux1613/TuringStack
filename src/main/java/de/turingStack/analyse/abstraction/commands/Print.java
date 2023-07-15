@@ -39,7 +39,9 @@ public class Print extends Command {
                     }
                     System.out.println(
                             "Content of register " + register.getRegisterName() + ": [" + joiner + "]");
-                }, () -> System.out.println("No register found"));
+                }, () -> VariableProvider.getVariableByName(valueToken.content()).ifPresentOrElse(variable -> {
+                    System.out.println("Variable '" + variable.name() + "' has value: '" + variable.value() + "'");
+                }, () -> System.out.println("No variable/register found")));
             });
         });
     }

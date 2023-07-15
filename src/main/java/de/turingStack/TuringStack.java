@@ -30,8 +30,7 @@ public class TuringStack {
         Logger.getLogger(TuringStack.class.getSimpleName())
                 .log(Level.INFO, "Scann '" + projectPath + "' for files..");
 
-        final File[] filesToCompile = new File(projectPath).listFiles(
-                (dir, name) -> name.matches(".*\\.tss"));
+        final File[] filesToCompile = new File(projectPath).listFiles((dir, name) -> name.matches(".*\\.tss"));
 
         if (filesToCompile.length == 0) {
             Logger.getLogger(TuringStack.class.getSimpleName())

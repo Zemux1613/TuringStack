@@ -1,3 +1,4 @@
 // print print;
 //comments are cool!
 var c = 1; // this is my comment
+print c;
