@@ -1,7 +1,5 @@
 createRegister a;
-
 var b = 1;
-
 push a b;
-
+print a;
 deleteRegister a;

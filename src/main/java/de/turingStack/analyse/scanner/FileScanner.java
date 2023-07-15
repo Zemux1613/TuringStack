@@ -14,37 +14,47 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class FileScanner extends Phase {
 
-    private final ConcurrentHashMap<File, String> fileContent = new ConcurrentHashMap<>();
+  private final ConcurrentHashMap<File, String> fileContent = new ConcurrentHashMap<>();
 
-    public FileScanner() {
-        super(1);
-    }
+  public FileScanner() {
+    super(1);
+  }
 
-    /**
-     * Read everything in the file
-     */
-    public void readAll() {
-        try {
-            final File targetFile = TuringStack.getAnalyseService().getTargetFile();
-            @Cleanup
-            BufferedReader bufferedReader = new BufferedReader(new java.io.FileReader(targetFile));
-            StringBuilder content = new StringBuilder();
-            while (bufferedReader.ready()) {
-                content.append(bufferedReader.readLine());
-            }
-            AnalyseService.getStorage().put(Constants.SCANNED_FILES, List.of(content.toString()));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+  /**
+   * Read everything in the file
+   */
+  public void readAll() {
+    try {
+      final File targetFile = TuringStack.getAnalyseService().getTargetFile();
+      @Cleanup
+      BufferedReader bufferedReader = new BufferedReader(new java.io.FileReader(targetFile));
+      StringBuilder content = new StringBuilder();
+      while (bufferedReader.ready()) {
+        String line = bufferedReader.readLine();
+        // skip comment lines
+        if (line.startsWith("//")) {
+          continue;
         }
-    }
 
-    @Override
-    public void start() {
-        fileContent.clear();
-        this.readAll();
+        // remove comments
+        if (line.contains("//")) {
+          line = line.substring(0, line.indexOf("//"));
+        }
+        content.append(line);
+      }
+      AnalyseService.getStorage().put(Constants.SCANNED_FILES, List.of(content.toString()));
+    } catch (IOException e) {
+      throw new RuntimeException(e);
     }
+  }
 
-    @Override
-    public void end() {
-    }
+  @Override
+  public void start() {
+    fileContent.clear();
+    this.readAll();
+  }
+
+  @Override
+  public void end() {
+  }
 }

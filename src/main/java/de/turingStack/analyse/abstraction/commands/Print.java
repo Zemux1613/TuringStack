@@ -2,19 +2,47 @@ package de.turingStack.analyse.abstraction.commands;
 
 import de.turingStack.analyse.abstraction.pasing.Command;
 import de.turingStack.analyse.abstraction.pasing.CommandLine;
+import de.turingStack.analyse.abstraction.scanner.Token;
 import de.turingStack.analyse.abstraction.scanner.TokenCategory;
 
+import de.turingStack.stack.RegisterProvider;
+import de.turingStack.stack.objects.Register;
+import de.turingStack.variables.VariableProvider;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
+import java.util.StringJoiner;
 
 public class Print extends Command {
 
-    public Print() {
-        super("print", List.of(Arrays.asList(TokenCategory.KEYWORD, TokenCategory.NAME, TokenCategory.LINEBREAK)));
-    }
+  public Print() {
+    super("print",
+        List.of(Arrays.asList(TokenCategory.KEYWORD, TokenCategory.NAME, TokenCategory.LINEBREAK)));
+  }
 
-    @Override
-    public void execute(CommandLine commandLine) {
-
-    }
+  @Override
+  public void execute(CommandLine commandLine) {
+    commandLine.getFirstOf(TokenCategory.KEYWORD).ifPresent(token -> {
+      if (!token.content().equals(this.getName())) {
+        return;
+      }
+      commandLine.getFirstOf(TokenCategory.NAME).ifPresent(valueToken -> {
+        RegisterProvider.getRegister(valueToken.content()).ifPresentOrElse(register -> {
+          Iterator iterator = register.iterator();
+          StringJoiner joiner = new StringJoiner(", ");
+          while (iterator.hasNext()) {
+            String string = iterator.next().toString();
+            VariableProvider
+                .getVariableByName(string)
+                .ifPresentOrElse(
+                    variable -> joiner.add(variable.value().toString()),
+                    () -> joiner.add(string));
+          }
+          System.out.println(
+              "Content of register " + register.getRegisterName() + ": [" + joiner + "]");
+        }, () -> System.out.println("No register found"));
+      });
+    });
+  }
 }

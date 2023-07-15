@@ -7,9 +7,10 @@ import java.util.List;
 
 @Data
 public abstract class Command {
-    private final String name;
-    private final List<List<TokenCategory>> syntax;
-    //private Token token;
 
-    public abstract void execute(CommandLine commandLine);
+  private final String name;
+  private final List<List<TokenCategory>> syntax;
+  //private Token token;
+
+  public abstract void execute(CommandLine commandLine);
 }
