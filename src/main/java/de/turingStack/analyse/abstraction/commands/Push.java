@@ -14,10 +14,9 @@ public class Push extends Command {
 
     public Push() {
         super("push", Arrays.asList(
-                Arrays.asList(TokenCategory.KEYWORD, TokenCategory.NAME, TokenCategory.NAME,
-                        TokenCategory.LINEBREAK),
-                Arrays.asList(TokenCategory.KEYWORD, TokenCategory.NAME, TokenCategory.NUMBER,
-                        TokenCategory.LINEBREAK))
+                        Arrays.asList(TokenCategory.KEYWORD, TokenCategory.NAME, TokenCategory.NAME, TokenCategory.LINEBREAK),
+                        Arrays.asList(TokenCategory.KEYWORD, TokenCategory.NAME, TokenCategory.NUMBER, TokenCategory.LINEBREAK)
+                )
         );
     }
 
@@ -35,8 +34,7 @@ public class Push extends Command {
                     .map(register -> register.orElse(null))
                     .findFirst();
 
-            if (commandLine.tokens().stream().map(Token::category).toList()
-                    .contains(TokenCategory.NUMBER)) {
+            if (commandLine.tokens().stream().map(Token::category).toList().contains(TokenCategory.NUMBER)) {
                 commandLine.getFirstOf(TokenCategory.NUMBER)
                         .ifPresent(valueToken -> registerOptional
                                 .ifPresent(
