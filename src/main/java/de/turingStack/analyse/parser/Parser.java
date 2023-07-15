@@ -91,8 +91,7 @@ public class Parser extends Phase {
                     commandLine.tokens().stream().map(Token::content)
                             .forEach(s -> line.append(s).append(" "));
                     throw new InvallidSyntaxException(
-                            "Their is a syntax error in Line " + commandLine.lineCount() + "....\n\nLine: "
-                                    + line);
+                            "Their is a syntax error in Line " + commandLine.lineCount() + "....\n\nLine: " + line);
                 } catch (InvallidSyntaxException e) {
                     throw new RuntimeException(e);
                 }
